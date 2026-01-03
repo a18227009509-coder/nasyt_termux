@@ -32,4 +32,14 @@ Please enter the chmod command after downloading
 ```
 chmod +x .nasyt/*
 ```
+ **
 
+### Introduction to feature 😋** 
+1.** Robot deployment ** 
+It collects AstrBot robots (more will be collected later), Adapter only NapCat and Onebot, as well as the recommended scheme: AstrBot|NapCat!
+2. **Container management** 
+For inside proot-distro, collected all the containers, _At present, only the download container has been developed, and more functions will be updated later!_ 
+3. **Python specify Version Installation** 
+Currently only available for download 3.8.x and versions below 3.8.x x, we will gradually adapt them later version above 3.8.x!
+
+Current script can only be installed version 3.8.x and versions below 3.8.x will be gradually adapted later version above 3.8.x!
