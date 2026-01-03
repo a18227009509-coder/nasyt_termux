@@ -26,3 +26,10 @@ or wget
 bash -c "$(wget -qO- https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/nasyt_termux.sh)"
 ```
 
+Please enter the chmod command after downloading
+
+
+```
+chmod +x .nasyt/*
+```
+
