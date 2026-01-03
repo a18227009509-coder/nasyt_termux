@@ -1,36 +1,28 @@
-# nasyt_termux
+ **Welcome naster toolbox!** 
+### What is naster?
+Naster is for the nasyt script Termux Version, fully compatible Termux!In addition to some of the features of the nasyt script, there are other features of their own.
+ **
 
-#### Description
-{**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}
+### How to use/install naster?
+** 
+You can install it using the curl directive, and then use the `chomd +x .nasyt/*` > (Before that, download the nasyt script! ）
+ **1. Install/Download nasyt Script** 
+You can install nasyt through the official nasyt installation file script
 
-#### Software Architecture
-Software architecture description
+```
+bash -c "$(curl -L https://raw.gitcode.com/nasyt/nasyt-linux-tool/raw/master/nasyt_install.sh)"
+```
+ **2. Download naster script** 
+You can use curl or wget to get files
+curl
 
-#### Installation
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Instructions
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Contribution
-
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
+```
+bash -c "$(curl -o .nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/nasyt_termux.sh)"
+```
+or wget
 
 
-#### Gitee Feature
+```
+bash -c "$(wget -qO- https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/nasyt_termux.sh)"
+```
 
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
