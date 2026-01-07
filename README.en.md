@@ -32,7 +32,7 @@ Please enter the chmod command after downloading
 ```
 chmod +x .nasyt/*
 ```
- **### Introduction to feature 😋** 
+### Introduction to feature 😋
 1. ** Robot deployment ** 
 It collects AstrBot robots (more will be collected later), Adapter only NapCat and Onebot, as well as the recommended scheme: AstrBot|NapCat!
 2. **Container management** 
