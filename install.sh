@@ -122,6 +122,37 @@ install_main(){
                 fi
             fi
             ;;
+        2)
+            echo -e "$(info)开始检查pkg包..."
+            if command -v pkg >/dev/null 2>&1; then
+                echo -e "$(info)已检测到pkg包，稍后会使用pkg install安装"
+                sleep 0.5
+                echo -e "$(info)开始下载资源..."
+                pkg_must
+                pkg install -y $package > /dev/null 2>&1
+                echo -e "$(info)开始检查完整性..."
+                if command -v $package >/dev/null 2>&1; then
+                    echo -e "$(info)已下载$package!"
+                else
+                    echo -e "$(warn)未下载$package!"
+                fi
+            else
+                echo -e "$(info)开始检查apt包..."
+                if command -v apt >/dev/null 2>&1; then
+                    echo -e "$(info)已检测到apt包，稍后会使用apt install安装"
+                    sleep 0.5
+                    echo -e "$(info)开始下载资源..."
+                    apt_must
+                    apt install -y $apt_package > /dev/null 2>&1
+                    echo -e "$(info)开始检查完整性..."
+                    if command -v $apt_package >/dev/null 2>&1; then
+                        echo -e "$(info)已下载$apt_package!"
+                    else
+                        echo -e "$(warn)未下载$apt_package!"
+                    fi
+                fi
+            fi
+            ;; 
         4)
             exit 0
             ;;
@@ -153,6 +184,14 @@ warn(){
 
 fail(){
     echo -e "$cyan[$(date +"%r")]$color $red[FAIL]$color" $*
+}
+
+pkg_must(){
+    package = ("wegt" "curl" "uv" "proot-distro" "make" "cmake" "clang" "git" "figlet" "neofetch")
+}
+
+apt_must(){
+    package = ("wegt" "curl" "uv"  "make" "cmake" "clang" "git" "figlet" "fastfetch")
 }
 
 color_variable
