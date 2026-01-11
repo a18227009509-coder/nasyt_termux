@@ -42,7 +42,7 @@ install_main(){
                         echo -e "$(warn)未检测到脚本！"
                         sleep 0.5
                         echo -e "$(info)正在从Gitcode下载脚本..."
-                        curl -L -s -o .nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/321b5fc06699d1e9125f4197e6bd7a02c7b3914f/nasyt_termux.sh
+                        curl -L -s -o $HOME/.nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/321b5fc06699d1e9125f4197e6bd7a02c7b3914f/nasyt_termux.sh
                         echo -e "$(info)给予naster权限..."
                         chmod +x $HOME/.nasyt/*
                         echo -e "$(info)检查脚本是否安装..."
@@ -90,7 +90,7 @@ install_main(){
                     exit 0
                 else
                     echo -e "$(info)正在从Gitcode下载脚本..."
-                    curl -L -s -o .nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/321b5fc06699d1e9125f4197e6bd7a02c7b3914f/nasyt_termux.sh
+                    curl -L -s -o $HOME/.nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/321b5fc06699d1e9125f4197e6bd7a02c7b3914f/nasyt_termux.sh
                     echo -e "$(info)给予naster权限..."
                     chmod +x $HOME/.nasyt/*
                     echo -e "$(info)检查脚本是否安装..."
@@ -124,13 +124,12 @@ install_main(){
             ;;
         2)
             echo -e "$(info)开始检查pkg包..."
-            if command -v pkg >/dev/null 2>&1; then
+            if command -v pkg &>/dev/null ; then
                 echo -e "$(info)已检测到pkg包，稍后会使用pkg install安装"
                 must_pkg_install
-                exit 0
             else
                 echo -e "$(info)开始检查apt包..."
-                if command -v apt >/dev/null 2>&1; then
+                if command -v apt &>/dev/null ; then
                     echo -e "$(info)已检测到apt包，稍后会使用apt install安装"
                     apt update && apt upgrade
                     clear
@@ -192,7 +191,7 @@ pkg_install() {
 }
 
 must_pkg_install() {
-    echo "正在检查必备软件包安装"
+    echo -e "$(info)正在检查必备软件包安装..."
     pkg_install curl
     pkg_install proot-distro
     pkg_install neofetch
