@@ -126,30 +126,20 @@ install_main(){
             echo -e "$(info)开始检查pkg包..."
             if command -v pkg >/dev/null 2>&1; then
                 echo -e "$(info)已检测到pkg包，稍后会使用pkg install安装"
-                sleep 0.5
-                echo -e "$(info)开始下载资源..."
-                pkg_must
-                pkg install -y $package > /dev/null 2>&1
-                echo -e "$(info)开始检查完整性..."
-                if command -v $package >/dev/null 2>&1; then
-                    echo -e "$(info)已下载$package!"
-                else
-                    echo -e "$(warn)未下载$package!"
-                fi
+                must_pkg_install
+                exit 0
             else
                 echo -e "$(info)开始检查apt包..."
                 if command -v apt >/dev/null 2>&1; then
                     echo -e "$(info)已检测到apt包，稍后会使用apt install安装"
+                    apt update && apt upgrade
+                    clear
                     sleep 0.5
                     echo -e "$(info)开始下载资源..."
-                    apt_must
-                    apt install -y $apt_package > /dev/null 2>&1
-                    echo -e "$(info)开始检查完整性..."
-                    if command -v $apt_package >/dev/null 2>&1; then
-                        echo -e "$(info)已下载$apt_package!"
-                    else
-                        echo -e "$(warn)未下载$apt_package!"
-                    fi
+                    must_apt_install
+                else
+                    echo -e "$(fail)无法检测pkg/apt包！"
+                    exit 0
                 fi
             fi
             ;; 
@@ -186,12 +176,59 @@ fail(){
     echo -e "$cyan[$(date +"%r")]$color $red[FAIL]$color" $*
 }
 
-pkg_must(){
-    package = ("wegt" "curl" "uv" "proot-distro" "make" "cmake" "clang" "git" "figlet" "neofetch")
+pkg_install() {
+    pkg_install_app="$*" 
+    if command -v $pkg_install_app >/dev/null 2>&1; then
+        echo -e "$green $pkg_install_app已经安装，跳过步骤$color"
+    else 
+        echo "正在安装$pkg_install_app"
+        pkg install -y $pkg_install_app >/dev/null; 
+        if [ $? -ne 0 ]; then
+            echo -e "$(info)安装成功 $color"
+        else
+            echo -e "$(warn)安装失败 $color"
+        fi
+    fi
 }
 
-apt_must(){
-    package = ("wegt" "curl" "uv"  "make" "cmake" "clang" "git" "figlet" "fastfetch")
+must_pkg_install() {
+    echo "正在检查必备软件包安装"
+    pkg_install curl
+    pkg_install proot-distro
+    pkg_install neofetch
+    pkg_install figlet
+    pkg_install wget
+    pkg_install git
+    pkg_install make
+    pkg_install cmake
+    pkg_install clang
+}
+
+apt_install() {
+    apt_install_app="$*" 
+    if command -v $apt_install_app >/dev/null 2>&1; then
+        echo -e "$green $apt_install_app已经安装，跳过步骤$color"
+    else 
+        echo "正在安装$apt_install_app"
+        apt install -y $apt_install_app >/dev/null; 
+        if [ $? -ne 0 ]; then
+            echo -e "$(info)安装成功 $color"
+        else
+            echo -e "$(warn)安装失败 $color"
+        fi
+    fi
+}
+
+must_apt_install() {
+    echo "正在检查必备软件包安装"
+    apt_install curl
+    apt_install fastfetch
+    apt_install figlet
+    apt_install wget
+    apt_install git
+    apt_install make
+    apt_install cmake
+    apt_install clang
 }
 
 color_variable
