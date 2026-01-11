@@ -1,23 +1,23 @@
- **Welcome naster toolbox!** 
-### What is naster?
-Naster is for the nasyt script Termux Version, fully compatible Termux!In addition to some of the features of the nasyt script, there are other features of their own.
+ **欢迎纳斯特工具箱！** 
+###naster是什么？
+Naster是针对nasyt脚本的Termux版本，完全兼容Termux！除了nasyt脚本的一些特性外，还有其他自己的特性.
  **
 
-### How to use/install naster?
+###如何使用/安装纳斯特？
 ** 
-You can install it using the curl directive, and then use the `chomd +x .nasyt/*` > (Before that, download the nasyt script! ）
- **1. Install/Download nasyt Script** 
-You can install nasyt through the official nasyt installation file script
+可以使用Curl指令安装它，然后使用`chomd+x.nasyt/*`>(在此之前，请下载nasyt脚本！)
+ **1.安装/下载nasyt脚本** 
+您可以通过正式的nasyt安装文件脚本安装nasyt.
 
 ```
-bash -c "$(curl -L https://raw.gitcode.com/nasyt/nasyt-linux-tool/raw/master/nasyt_install.sh)"
+bash-c"$(curl-L https://raw.gitcode.com/nasyt/nasyt-linux-tool/raw/master/nasyt_install.sh)"
 ```
- **2. Download naster script** 
-You can use curl or wget to get files
-curl
+ **2.下载纳斯特脚本** 
+可以使用curl或wget获取文件。
+卷曲
 
 ```
-bash -c "$(curl -o .nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/nasyt_termux.sh)"
+bash-c"$(curl-o.nasyt/naster"
 ```
 or wget
 
