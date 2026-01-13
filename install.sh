@@ -55,7 +55,7 @@ install_main(){
                             echo -e "$(warn)未检测到脚本！"
                             sleep 0.5
                             echo -e "$(info)正在从GitHub下载脚本..."
-                            curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/a18227009509-coder/nasyt_termux/master/nasyt_termux.sh
+                            curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/HA-Hoshino-Ai/nasyt_termux/master/nasyt_termux.sh
                             echo -e "$(info)给予naster权限..."
                             chmod +x $HOME/.nasyt/*
                             echo -e "$(info)检查脚本是否安装..."
@@ -103,7 +103,7 @@ install_main(){
                         echo -e "$(warn)未检测到脚本！"
                         sleep 0.5
                         echo -e "$(info)正在从GitHub下载脚本..."
-                        curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/a18227009509-coder/nasyt_termux/master/nasyt_termux.sh
+                        curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/HA-Hoshino-Ai/nasyt_termux/master/nasyt_termux.sh
                         echo -e "$(info)给予naster权限..."
                         chmod +x $HOME/.nasyt/*
                         echo -e "$(info)检查脚本是否安装..."
