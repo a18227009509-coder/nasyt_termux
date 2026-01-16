@@ -8,7 +8,8 @@ install_main(){
     echo -e "$grey——————————————————————————————————$color"
     echo "1.下载naster脚本✨"
     echo "2.补全naster资源✨"
-    echo "3.下载其他版本✨"
+    echo "3.降低naster版本✨"
+    echo "4.其他naster版本✨️"
     echo "0.退出"
     read -p ">>>" install_xz
     case $install_xz in
@@ -55,7 +56,7 @@ install_main(){
                             echo -e "$(warn)未检测到脚本！"
                             sleep 0.5
                             echo -e "$(info)正在从GitHub下载脚本..."
-                            curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/HA-Hoshino-Ai/nasyt_termux/master/nasyt_termux.sh
+                            curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/a18227009509-coder/nasyt_termux/master/nasyt_termux.sh
                             echo -e "$(info)给予naster权限..."
                             chmod +x $HOME/.nasyt/*
                             echo -e "$(info)检查脚本是否安装..."
@@ -103,7 +104,7 @@ install_main(){
                         echo -e "$(warn)未检测到脚本！"
                         sleep 0.5
                         echo -e "$(info)正在从GitHub下载脚本..."
-                        curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/HA-Hoshino-Ai/nasyt_termux/master/nasyt_termux.sh
+                        curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/a18227009509-coder/nasyt_termux/master/nasyt_termux.sh
                         echo -e "$(info)给予naster权限..."
                         chmod +x $HOME/.nasyt/*
                         echo -e "$(info)检查脚本是否安装..."
@@ -142,6 +143,74 @@ install_main(){
                 fi
             fi
             ;; 
+        3)
+            echo -e "$(info)正在检查已有版本..."
+            if command -v naster >/dev/null 2>&1; then
+                clear
+                echo "(info)正在删除当前已有版本"
+                rm -r $HOME/.nasyt/naster
+            fi
+            echo -e "(info)选择你想要下载的版本"
+            echo "(1)2.0.51"
+            echo "(2)2.0.5"
+            echo "←返回"
+            read -p ">>>" downdate_xz
+            case $downdate_xz in
+                1)
+                    break
+                    ;;
+                2)
+                    echo -e "$(info)请稍候..."
+                    sleep 2
+                    echo -e "$(info)正在下载脚本..."
+                    curl -L -s -o $HOME/.nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/history/nasyt_termux2.0.5.sh
+                    echo -e "$(info)给予naster权限..."
+                    chmod +x $HOME/.nasyt/*
+                    echo -e "$(info)检查脚本是否安装..."
+                    if command -v naster >/dev/null 2>&1 ; then
+                        echo -e "$(info)检测到脚本！"
+                        sleep 0.5
+                        echo -e "$(info)输入$pink naster $color以启动脚本！"
+                        exit 0
+                    else
+                        echo -e "$(info)正在从Gitcode下载脚本..."
+                        curl -L -s -o $HOME/.nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/master/history/nasyt_termux2.0.5.sh
+
+                        echo -e "$(info)给予naster权限..."
+                        chmod +x $HOME/.nasyt/*
+                        echo -e "$(info)检查脚本是否安装..."
+                        if command -v naster >/dev/null 2>&1 ; then
+                            echo -e "$(info)检测到脚本！"
+                            sleep 0.5
+                            echo -e "$(info)输入$pink naster $color以启动脚本！"
+                            exit 0
+                        else
+                            echo -e "$(warn)未检测到脚本！"
+                            sleep 0.5
+                            echo -e "$(info)正在从GitHub下载脚本..."
+                            curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/HA-Hoshino-Ai/nasyt_termux/master/history/nasyt_termux2.0.5.sh
+                            echo -e "$(info)给予naster权限..."
+                            chmod +x $HOME/.nasyt/*
+                            echo -e "$(info)检查脚本是否安装..."
+                            if command -v naster >/dev/null 2>&1 ; then
+                                echo -e "$(info)检测到脚本！"
+                                sleep 0.5
+                                echo -e "$(info)输入$pink naster $color以启动脚本！"
+                                exit 0
+                            else
+                                echo -e "$(warn)未检测到脚本！"
+                                sleep 0.5
+                                echo -e "$(fail)无法下载脚本！请稍后重试！"
+                                exit 0
+                            fi
+                        fi 
+                    fi
+                    ;;
+                3)
+                    exit 0
+                    ;;
+            esac
+            ;;
         4)
             exit 0
             ;;
