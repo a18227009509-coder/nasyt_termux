@@ -1,12 +1,12 @@
 #!/bin/bash
-# 由HA制作的nasyt_termux
+# 由HA制作的naster
 # NAS油条工具箱（Termux版本）
 #赤石/BUG反馈群号:610699712
 
 
 #🤓变量部分------------------
 time_date="2026/01/02"
-version="2.0.51"
+version="2.0.6"
 nasyt_dir="$HOME/.nasyt"
 source $nasyt_dir/config.txt >/dev/null 2>&1 ;
 
@@ -30,29 +30,56 @@ gx_show() {
         read -p "请选择：" update_choose
         case $update_choose in
             1)
-                clear
-                echo "开始更新脚本"
-                curl -o $HOME/.nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/nasyt_termux.sh
-                sleep 1
-                while true
-                do
-                    chmod +x .nasyt/*
-                    if command -v naster >/dev/null 2>&1; then
-                        echo "已下载成功！请输入naster以进入"
-                        sleep 1
-                        break
+                echo -e "$(info)正在下载脚本..."
+                curl -L -s -o $HOME/.nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/nasyt_termux.sh
+                echo -e "$(info)给予naster权限..."
+                chmod +x $HOME/.nasyt/*
+                echo -e "$(info)检查脚本是否安装..."
+                if command -v naster >/dev/null 2>&1 ; then
+                    echo -e "$(info)检测到脚本！"
+                    sleep 0.5
+                    echo -e "$(info)输入$pink naster $color以启动脚本！"
+                    exit 0
+                else
+                    echo -e "$(warn)未检测到脚本！"
+                    sleep 0.5
+                    echo -e "$(info)正在从Gitcode下载脚本..."
+                    curl -L -s -o $HOME/.nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/321b5fc06699d1e9125f4197e6bd7a02c7b3914f/nasyt_termux.sh
+                    echo -e "$(info)给予naster权限..."
+                    chmod +x $HOME/.nasyt/*
+                    echo -e "$(info)检查脚本是否安装..."
+                    if command -v naster >/dev/null 2>&1 ; then
+                        echo -e "$(info)检测到脚本！"
+                        sleep 0.5
+                        echo -e "$(info)输入$pink naster $color以启动脚本！"
+                        exit 0
                     else
-                        echo "下载失败，正在重试..."
-                        curl -o $HOME/.nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/nasyt_termux.sh
-                    fi
-                done
-                exit 0
+                        echo -e "$(warn)未检测到脚本！"
+                        sleep 0.5
+                        echo -e "$(info)正在从GitHub下载脚本..."
+                        curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/a18227009509-coder/nasyt_termux/master/nasyt_termux.sh
+                        echo -e "$(info)给予naster权限..."
+                        chmod +x $HOME/.nasyt/*
+                        echo -e "$(info)检查脚本是否安装..."
+                        if command -v naster >/dev/null 2>&1 ; then
+                            echo -e "$(info)检测到脚本！"
+                            sleep 0.5
+                            echo -e "$(info)输入$pink naster $color以启动脚本！"
+                            exit 0
+                        else
+                            echo -e "$(warn)未检测到脚本！"
+                            sleep 0.5
+                            echo -e "$(fail)无法下载脚本！请稍后重试！"
+                            exit 0
+                        fi
+                    fi 
+                fi
                 ;;
             2)
                 esc
                 ;;
             *)
-                echo "无效的输入！请重新进入！"
+                echo "$(fail)无效的输入！请重新进入！"
                 sleep 1
                 ;;
         esac
@@ -148,16 +175,23 @@ habit_choose(){
 }
 
 must_pkg_install() {
-    echo "正在检查必备软件包安装"
-    pkg_install curl -y
-    pkg_install proot-distro -y
-    pkg_install neofetch -y
-    pkg_install figlet -y
-    pkg_install wget -y
-    pkg_install git -y
-    pkg_install make -y
-    pkg_install cmake -y
-    pkg_install clang -y
+    echo -e "$(info)正在更新pkg包..."
+    pkg update && pkg upgrade -y
+    clear
+    echo -e "$(info)正在检查必备软件包安装"
+    pkg_install curl 
+    pkg_install proot-distro 
+    pkg_install neofetch 
+    pkg_install figlet 
+    pkg_install wget 
+    pkg_install git 
+    pkg_install make 
+    pkg_install cmake 
+    pkg_install clang 
+    pkg_install proot
+    pkg_install openssh
+    pkg_install python
+    pkg_install uv
     clear
 }
 
@@ -177,12 +211,13 @@ menu_main() {
     clear
     if command -v figlet >/dev/null 2>&1; then
         figlet N A S x H A
-        warn
+        warn_head
     fi
     br #分割
-    echo "1) 启动nasyt-termux"
-    echo "2) 更新nasyt-termux"
-    echo "3) 卸载nasyt-termux"
+    echo "1) 启动naster"
+    echo "2) 更新naster"
+    echo "3) 卸载naster"
+    echo "4) 降级naster"
     echo "0) 退出"
     br #分割
 }
@@ -214,12 +249,119 @@ main() {
                     echo 3
                     cd $HOME/.nasyt                
                     rm -rf naster
-                    echo "开始删除前置资源包"
+                    echo -e "$(info)开始删除前置资源包"
                     sleep 1
                     pkg remove $pkg_install_app -y
-                    echo "已完成删除！但是保留了.nasyt文件夹！"
+                    echo -e "$(info)已完成删除！但是保留了.nasyt文件夹！"
                     exit 0
                     ;;
+                4)
+                    echo -e "$(info)正在检查已有版本..."
+                    if command -v naster >/dev/null 2>&1; then
+                    clear
+                    echo "(info)正在删除当前已有版本"
+                    rm -r $HOME/.nasyt/naster
+                    fi
+                    echo -e "$(info)选择你想要下载的版本"
+                    echo "(1)2.0.51"
+                    echo "(2)2.0.5"
+                    echo "(0)←返回"
+                    read -p ">>>" downdate_xz
+                    case $downdate_xz in
+                        1)
+                            echo -e "$(info)请稍候..."
+                            sleep 2
+                            echo -e "$(info)正在下载脚本..."
+                            curl -L -s -o $HOME/.nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/history/nasyt_termux2.0.51.sh
+                            echo -e "$(info)给予naster权限..."
+                            chmod +x $HOME/.nasyt/*
+                            echo -e "$(info)检查脚本是否安装..."
+                            if command -v naster >/dev/null 2>&1 ; then
+                                echo -e "$(info)检测到脚本！"
+                                sleep 0.5
+                                echo -e "$(info)输入$pink naster $color以启动脚本！"
+                                exit 0
+                            else
+                                echo -e "$(info)正在从Gitcode下载脚本..."
+                                curl -L -s -o $HOME/.nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/master/history/nasyt_termux2.0.51.sh
+                                echo -e "$(info)给予naster权限..."
+                                chmod +x $HOME/.nasyt/*
+                                echo -e "$(info)检查脚本是否安装..."
+                                if command -v naster >/dev/null 2>&1 ; then
+                                    echo -e "$(info)检测到脚本！"
+                                    sleep 0.5
+                                    echo -e "$(info)输入$pink naster $color以启动脚本！"
+                                    exit 0
+                                else
+                                    echo -e "$(warn)未检测到脚本！"
+                                    sleep 0.5
+                                    echo -e "$(info)正在从GitHub下载脚本..."
+                                    curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/HA-Hoshino-Ai/nasyt_termux/master/history/nasyt_termux2.0.51.sh
+                                    echo -e "$(info)给予naster权限..."
+                                    chmod +x $HOME/.nasyt/*
+                                    echo -e "$(info)检查脚本是否安装..."
+                                    if command -v naster >/dev/null 2>&1 ; then
+                                        echo -e "$(info)检测到脚本！"
+                                        sleep 0.5
+                                        echo -e "$(info)输入$pink naster $color以启动脚本！"
+                                        exit 0
+                                    else
+                                        echo -e "$(warn)未检测到脚本！"
+                                        sleep 0.5
+                                        echo -e "$(fail)无法下载脚本！请稍后重试！"
+                                        exit 0
+                                    fi
+                                fi 
+                            fi
+                            ;;
+                        2)
+                            echo -e "$(info)请稍候..."
+                            sleep 2
+                            echo -e "$(info)正在下载脚本..."
+                            curl -L -s -o $HOME/.nasyt/naster https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/history/nasyt_termux2.0.5.sh
+                            echo -e "$(info)给予naster权限..."
+                            chmod +x $HOME/.nasyt/*
+                            echo -e "$(info)检查脚本是否安装..."
+                            if command -v naster >/dev/null 2>&1 ; then
+                                echo -e "$(info)检测到脚本！"
+                                sleep 0.5
+                                echo -e "$(info)输入$pink naster $color以启动脚本！"
+                                exit 0
+                            else
+                                echo -e "$(info)正在从Gitcode下载脚本..."
+                                curl -L -s -o $HOME/.nasyt/naster https://gitcode.com/HA-Hoshino_Ai/nasyt_termux/raw/master/history/nasyt_termux2.0.5.sh
+                                echo -e "$(info)给予naster权限..."
+                                chmod +x $HOME/.nasyt/*
+                                echo -e "$(info)检查脚本是否安装..."
+                                if command -v naster >/dev/null 2>&1 ; then
+                                    echo -e "$(info)检测到脚本！"
+                                    sleep 0.5
+                                    echo -e "$(info)输入$pink naster $color以启动脚本！"
+                                    exit 0
+                                else
+                                    echo -e "$(warn)未检测到脚本！"
+                                    sleep 0.5
+                                    echo -e "$(info)正在从GitHub下载脚本..."
+                                    curl -L -s -o $HOME/.nasyt/naster  https://gh-proxy.com/https://raw.githubusercontent.com/HA-Hoshino-Ai/nasyt_termux/master/history/nasyt_termux2.0.5.sh
+                                    echo -e "$(info)给予naster权限..."
+                                    chmod +x $HOME/.nasyt/*
+                                    echo -e "$(info)检查脚本是否安装..."
+                                    if command -v naster >/dev/null 2>&1 ; then
+                                        echo -e "$(info)检测到脚本！"
+                                        sleep 0.5
+                                        echo -e "$(info)输入$pink naster $color以启动脚本！"
+                                        exit 0
+                                    else
+                                        echo -e "$(warn)未检测到脚本！"
+                                        sleep 0.5
+                                        echo -e "$(fail)无法下载脚本！请稍后重试！"
+                                        exit 0
+                                    fi
+                                fi 
+                            fi
+                            ;;
+                        esac
+                        ;;
                 0)
                     break
                     exit
@@ -238,7 +380,7 @@ main() {
     fi
 }
 
-warn(){
+warn_head(){
     echo -e "$red 注意！$color 请不要二次转发此项目！"
     echo -e "🤓脚本由$blue HA$color 和$blue NAS油条$color 制作"
 }
@@ -262,6 +404,9 @@ other_shell(){
     other_shell_xz=$($habit --title "其他脚本" \
     --menu "请选择" 0 0 10 \
     1 "Kail安装" \
+    2 "docker-termux" \
+    3 "石山代码" \
+    4 "不要选择" \
     0 "←返回" \
     2>&1 1>/dev/tty)
 }
@@ -278,7 +423,7 @@ about_naster(){
         echo -e "$new_version 新特性✨"
         curl "https://gitee.com/HA-Hoshino-Ai/nasyt_termux/raw/master/update.txt"
     fi
-    echo "由Hoshino Ai和NAS油条制作!"
+    echo "本脚本由Hoshino Ai和NAS油条制作!"
     read -p "按下Enter键返回"
 }
 
@@ -286,6 +431,7 @@ test_shell(){
     test_shell_xz=$($habit --title "实验脚本" \
     --menu "请选择" 0 0 10 \
     1 "QEMU管理" \
+    2 "Python安装" \
     0 "←返回" \
     2>&1 1>/dev/tty)
 }
@@ -308,9 +454,6 @@ basic_tools(){
     1 "机器人部署" \
     2 "机器人启动" \
     3 "容器管理" \
-    4 "Python指定版本安装" \
-    5 "石山代码" \
-    6 "不要选择" \
     0 "←返回" \
     2>&1 1>/dev/tty)
 }
@@ -461,15 +604,17 @@ index_main(){
                                 bot_mannage #调用bot部署菜单。
                                 case $bot_mannage_xz in #读取选择
                                     1)
-                                        curl -o napcat.termux.sh https://nclatest.znin.net/NapNeko/NapCat-Installer/main/script/install.termux.sh && bash napcat.termux.sh
-                                        proot-distro login napcat -- bash -c 'bash <(curl -sSL https://raw.githubusercontent.com/zhende1113/Antlia/refs/heads/main/Script/AstrBot/Antlia.sh)'
-                                        proot-distro login napcat -- bash -c 'logout'
+                                        proot-distro install debian
+                                        proot-distro login debian -- bash -c 'apt-get install -y sudo'
+                                        proot-distro login debian -- bash -c 'curl -o napcat.sh https://nclatest.znin.net/NapNeko/NapCat-Installer/main/script/install.sh && bash napcat.sh'
+                                        proot-distro login debian -- bash -c 'bash <(curl -sSL https://gh-proxy.com/https://raw.githubusercontent.com/zhende1113/Antlia/refs/heads/main/Script/AstrBot/Antlia.sh)'
                                         esc
                                         clear
                                         ;; # 这里要用;;结尾，case命令必须要。
                                     2)
-                                        proot-distro install debian
-                                        proot-distro login debian -- bash -c 'bash <(curl -sSL https://raw.githubusercontent.com/zhende1113/Antlia/refs/heads/main/Script/AstrBot/Antlia.sh)'
+                                        proot-distro install ubuntu
+                                        proot-distro rename ubuntu astrbot
+                                        proot-distro login astrbot -- bash -c 'bash <(curl -sSL https://gh-proxy.com/https://raw.githubusercontent.com/zhende1113/Antlia/refs/heads/main/Script/AstrBot/Antlia.sh)'
                                         esc
                                         clear
                                         ;;
@@ -499,8 +644,8 @@ index_main(){
                                 bot_mannage_start
                                 case $bot_mannage_start_xz in
                                     1)
-                                        proot-distro login debian -- bash -c 'cd AstrBot'
-                                        proot-distro login debian -- bash -c 'bash astrbot.sh'
+                                        proot-distro login astrbot -- bash -c 'cd AstrBot'
+                                        proot-distro login astrbot -- bash -c 'bash astrbot.sh'
                                         esc
                                         ;;
                                     2)
@@ -662,78 +807,6 @@ index_main(){
                                 esac
                             done
                             ;;
-                        4)
-                            clear
-                            download_python
-                            esc
-                            ;;
-                        5)
-                            clear
-                            echo "请输入你要下载的资源包🤓（比如sl）"
-                            read -p "请输入:" package_shit
-                            if command -v $package_shit >/dev/null 2>&1; then
-                                echo "你似乎已经安装它了，不需要再次安装🙃"
-                            else
-                                echo "原来你还没安装啊🤓"
-                                sleep 1
-                                echo "那我帮你安装吧🤓"
-                                pkg install $package_shit -y
-                                echo "已完成操作🤓"
-                            fi
-                            esc
-                            clear
-                            ;;
-                        6)
-                            clear
-                            echo "你竟然选了😨"
-                            sleep 1
-                            echo "那我帮你退出吧🤓"
-                            sleep 1
-                            echo "你想让我帮你退出吗？🤓"
-                            echo "1.想让你帮我退出🤓"
-                            echo "2.不想让你帮我退出🤓"
-                            read -p "请输入🤓:" exit_exit
-                            case $exit_exit in
-                                1)
-                                    echo "好的，帮你退出🤓"
-                                    exit
-                                    ;;
-                                2)
-                                    clear
-                                    echo "你想让我帮你退出吗？🤓"
-                                    echo "1.想让你帮我退出🤓"
-                                    echo -e "$red ERROR $color"
-                                    read -p "请选择🤓:" really_exit
-                                        case $really_exit in
-                                            1)
-                                                exit
-                                                ;;
-                                            10086)
-                                                echo "被你发现了😨"
-                                                sleep 1
-                                                echo "那给你返回吧😩"
-                                                sleep 1
-                                                esc
-                                                ;;
-                                            *)
-                                                echo "不选择就帮你退出吧🤓"
-                                                exit
-                                                ;;
-                                        esac
-                                    ;;
-                                10086)
-                                    echo "被你发现了😨"
-                                    sleep 1
-                                    echo "那给你返回吧😩"
-                                    sleep 1
-                                    esc
-                                    ;;
-                                *)
-                                    echo "不选择就帮你退出吧🤓"
-                                    exit
-                                    ;;
-                            esac
-                            ;;
                         0)
                             break #返回
                             ;;
@@ -800,6 +873,11 @@ index_main(){
                                 esac
                             done
                             ;;
+                        2)
+                            clear
+                            download_python
+                            esc
+                            ;;
                         0)
                             break
                             ;;
@@ -815,6 +893,78 @@ index_main(){
                     case $other_shell_xz in
                     1)
                         break
+                        ;;
+                    2)
+                        clear
+                        docker_shell
+                        read
+                        ;;
+                    3)
+                        clear
+                        echo "请输入你要下载的资源包🤓（比如sl）"
+                        read -p "请输入:" package_shit
+                        if command -v $package_shit >/dev/null 2>&1; then
+                            echo "你似乎已经安装它了，不需要再次安装🙃"
+                        else
+                            echo "原来你还没安装啊🤓"
+                            sleep 1
+                            echo "那我帮你安装吧🤓"
+                            pkg install $package_shit -y
+                            echo "已完成操作🤓"
+                        fi
+                        esc
+                        clear
+                        ;;
+                    4)
+                        clear
+                        echo "你竟然选了😨"
+                        sleep 1
+                        echo "那我帮你退出吧🤓"
+                        sleep 1
+                        echo "你想让我帮你退出吗？🤓"
+                        echo "1.想让你帮我退出🤓"
+                        echo "2.不想让你帮我退出🤓"
+                        read -p "请输入🤓:" exit_exit
+                        case $exit_exit in
+                            1)
+                                echo "好的，帮你退出🤓"
+                                exit
+                                ;;
+                            2)
+                                clear
+                                echo "你想让我帮你退出吗？🤓"
+                                echo "1.想让你帮我退出🤓"
+                                echo -e "$red ERROR $color"
+                                read -p "请选择🤓:" really_exit
+                                    case $really_exit in
+                                        1)
+                                            exit
+                                            ;;
+                                        10086)
+                                            echo "被你发现了😨"
+                                            sleep 1
+                                            echo "那给你返回吧😩"
+                                            sleep 1
+                                            esc
+                                            ;;
+                                        *)
+                                            echo "不选择就帮你退出吧🤓"
+                                            exit
+                                            ;;
+                                    esac
+                                ;;
+                            10086)
+                                echo "被你发现了😨"
+                                sleep 1
+                                echo "那给你返回吧😩"
+                                sleep 1
+                                esc
+                                ;;
+                            *)
+                                echo "不选择就帮你退出吧🤓"
+                                exit
+                                ;;
+                        esac
                         ;;
                     0)
                         break
@@ -838,40 +988,25 @@ index_main(){
     done # 循环结束。
 }
 
-install_text(){
-    br
-    echo "Install programm"
-    br
+info(){
+    echo -e "$cyan[$(date +"%r")]$color $green[INFO]$color" $*
 }
-
-install_main(){
-    while true
-    do
-        install_text
-        echo "1.安装"
-        echo "2.退出"
-        read -p "请选择：" choose_main_xz
-        case $choose_main_xz in
-        1)
-            clear
-            must_pkg_install
-            echo "启动脚本请输入nasyt_termux"
-            sleep 1
-            clear
-            break
-            ;;
-        2)
-            clear
-            break
-            ;;
-        *)
-            echo "无效的输入"
-            sleep 1
-            ;;
-        esac
-    done
+warn(){
+    echo -e "$cyan[$(date +"%r")]$color $yellow[WARN]$color" $*
 }
-
+fail(){
+    echo -e "$cyan[$(date +"%r")]$color $red[FAIL]$color" $*
+}
+docker_shell(){
+    clear
+    echo -e "$(info)$green正在下载docker$color"
+    curl -fsSL -o get-docker.sh https://get.docker.com/
+    sh get-docker.sh
+    echo -e "$(info)$green正在创建沙盒环境$color"
+    termux-chroot
+    usermod -aG docker $USER
+    echo -e "$(info)$green请重启termux，然后输入$blue docker run -it ubuntu $color以启动"
+}
 
 #🤓运行部分-----------------
 clear #清屏
