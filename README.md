@@ -1,4 +1,4 @@
- **Welcome naster toolbox!** 
+**Welcome to use naster toolbox!** 
 ### What is naster?
 Naster is for the nasyt script Termux Version, fully compatible Termux!In addition to some of the features of the nasyt script, there are other features of their own.
  **
@@ -42,3 +42,7 @@ Currently only available for download 3.8.x and versions below 3.8.x x, we will 
 
 Current script can only be installed version 3.8.x and versions below 3.8.x will be gradually adapted later version above 3.8.x!
 
+### Sponsor me
+WeChat sponsorship code ↓
+
+![mm_reward_qrcode_1768535089805.png](https://raw.gitcode.com/user-images/assets/8947682/c57b9a34-b61d-452d-b261-ac588d185188/mm_reward_qrcode_1768535089805.png 'mm_reward_qrcode_1768535089805.png')
